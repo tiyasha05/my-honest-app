@@ -5,7 +5,6 @@ import { Notifier, Ledger, JSON } from '@klave/sdk';
 
 /**
  * @query
- * @param {FetchInput} input - A parsed input argument
  */
 export function fetchValue(input: string): void {
 
@@ -21,7 +20,6 @@ export class Input{
 
 /**
  * @transaction
-//  * param {StoreInput} input - A parsed input argument
  */
 export function storeValue(input: Input): void {
 
