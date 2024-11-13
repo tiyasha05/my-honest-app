@@ -1,44 +1,33 @@
 import { Notifier, Ledger, JSON } from '@klave/sdk';
-import { FetchInput, FetchOutput, StoreInput, StoreOutput, ErrorMessage } from './types';
+// import { FetchInput, FetchOutput, StoreInput, StoreOutput, ErrorMessage } from './types';
 
-const myTableName = "my_storage_table";
+// const myTableName = "my_storage_table";
 
 /**
  * @query
  * @param {FetchInput} input - A parsed input argument
  */
-export function fetchValue(input: FetchInput): void {
+export function fetchValue(input: string): void {
 
-    let value = Ledger.getTable(myTableName).get(input.key);
-    if (value.length === 0) {
-        Notifier.sendJson<ErrorMessage>({
-            success: false,
-            message: `key '${input.key}' not found in table`
-        });
-    } else {
-        Notifier.sendJson<FetchOutput>({
-            success: true,
-            value
-        });
-    }
+    let value = Ledger.getTable('myTableName').get(input);
+    // Notifier.sendJson<string>()
+
+}
+@serializable
+export class Input{
+    key!: string;
+    value!: string;
 }
 
 /**
  * @transaction
- * @param {StoreInput} input - A parsed input argument
+//  * param {StoreInput} input - A parsed input argument
  */
-export function storeValue(input: StoreInput): void {
+export function storeValue(input: Input): void {
 
     if (input.key && input.value) {
-        Ledger.getTable(myTableName).set(input.key, input.value);
-        Notifier.sendJson<StoreOutput>({
-            success: true
-        });
-        return;
+        Ledger.getTable('myTableName').set(input.key, input.value);
+        Notifier.sendJson<string>(`key ${input.key} and value ${input.value} inserted`);
     }
 
-    Notifier.sendJson<ErrorMessage>({
-        success: false,
-        message: `Missing value arguments`
-    });
 }
